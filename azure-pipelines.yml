@@ -3,19 +3,24 @@ trigger:
 
 jobs:
 - job: Build
-  displayName: Build Maven Project
+  displayName: "Build Maven Project"
   pool:
-    name: Default  # tu pool de agente auto-hospedado
+    name: "Default"     # Aquí está tu agente auto-hospedado
+    demands:
+      - agent.name -equals vm-devops-lab
+
   steps:
   - task: Maven@4
-    displayName: 'Maven Package'
+    displayName: "Maven Package"
     inputs:
-      mavenPomFile: 'pom.xml'
+      mavenPomFile: "pom.xml"
+
   - task: CopyFiles@2
-    displayName: 'Copy Files to artifact staging directory'
+    displayName: "Copy Files to artifact staging directory"
     inputs:
-      SourceFolder: '$(System.DefaultWorkingDirectory)'
-      Contents: '**/target/*.?(war|jar)'
-      TargetFolder: $(Build.ArtifactStagingDirectory)
-  - upload: $(Build.ArtifactStagingDirectory)
-    artifact: drop
+      SourceFolder: "$(System.DefaultWorkingDirectory)"
+      Contents: "**/target/*.?(war|jar)"
+      TargetFolder: "$(Build.ArtifactStagingDirectory)"
+
+  - publish: "$(Build.ArtifactStagingDirectory)"
+    artifact: "drop"
