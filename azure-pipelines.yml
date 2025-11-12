@@ -1,12 +1,11 @@
 trigger:
 - main
 
-pool:
-  vmImage: ubuntu-latest
-
-jobs:  
+jobs:
 - job: Build
   displayName: Build Maven Project
+  pool:
+    name: Default  # tu pool de agente auto-hospedado
   steps:
   - task: Maven@4
     displayName: 'Maven Package'
